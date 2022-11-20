@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jt.mapper.DogMapper">
+
+    <!--
+        规则:
+            1.如果结果集字段名称与POJO属性的名称不一致
+            则mybatis无法自动完成映射.
+            2.Mybatis提供了一个属性resultMap(使用最多的).
+              支持用户手动映射.
+    -->
+    <select id="findAll" resultType="Dog">
+        select * from dog
+    </select>
+
+    <!--
+        属性说明:  id="唯一标识,不能重复"
+                  type="映射的POJO对象的类型"
+        简化说明:  如果字段名称与属性名称一致则可以省略
+                  autoMapping="true" 开启自动映射
+    -->
+    <resultMap id="dogRM" type="Dog" autoMapping="true">
+        <!--1.标识主键-->
+        <id column="dog_id" property="dogId"/>
+        <!--2.映射结果集-->
+        <result column="dog_name" property="dogName"/>
+        <!--<result column="age" property="age"/>-->
+    </resultMap>
+</mapper>

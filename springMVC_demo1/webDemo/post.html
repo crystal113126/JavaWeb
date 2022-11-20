@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>post请求语法</title>
+	</head>
+	<body>
+		<h1>post请求语法</h1>
+		<!-- 1.导入js包 -->
+		<script src="js/axios.js"></script>
+		
+		<!-- 2.发起post请求 -->
+		<script>
+			
+			//1.指定请求的前缀
+			axios.defaults.baseURL="http://localhost:8080/axios"
+			
+			/**
+			 * 2. 需求: 一般业务新增时,采用post提交
+			 *    URL: http://localhost:8080/axios/saveUser
+			 * axios.post(url地址,js对象)
+			 * 		.then(回调函数!!!)
+			 */
+			let user1 = {id: 100,name:"tomcat",age:18,sex:"Fe"}
+			axios.post("/saveUser",user1)
+				 .then( promise => {
+					 console.log(promise.data)
+				 })
+			
+			/**
+			 * 业务需求:  实现数据的更新操作
+			 * 		     修改id=3的数据  name="张三"  age=18
+			 * URL:http://localhost:8080/axios/updateUser
+			 * 类型: put
+			 * 写法1: 利用对象传参提交数据
+			 * 写法2: 利用restFul结构实现
+			 */
+			let user2 = {id:3, name:"nathan", age:18}
+			axios.put("/updateUser",user2)
+				 .then(promise => {
+					 console.log(promise.data)
+				 })
+			
+			let url3=`http://localhost:8080/axios/user/${user2.name}/${user2.age}/${user2.id}`
+			axios.put(url3)
+				 .then(promise => {
+				 	console.log(promise.data)
+				 })	
+			
+		</script>
+		
+	</body>
+</html>

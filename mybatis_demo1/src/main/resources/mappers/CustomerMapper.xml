@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    调用流程:
+         1.编辑Mapper接口 编辑接口方法
+         2.映射文件与Mapper接口绑定 namespace
+-->
+<mapper namespace="com.jt.mapper.CustomerMapper">
+    <!--
+        1.id与接口的方法名称绑定
+        2. 回顾:JDBC->resultSet->遍历结果集->手动封装对象
+        3. resultType: mybatis自动的将结果集的数据封装为对象
+                       如果返回值List集合,则自动封装为List,User充当其中的泛型对象
+                       如果返回值User对象.则直接返回User对象
+    -->
+    <select id="findAll" resultType="com.jt.pojo.Customers">
+        select * from customers
+    </select>
+
+</mapper>

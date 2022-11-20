@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jt.mapper.UserMapper2">
+
+    <!--
+        问题说明: 前端数据传递时可能会有null数据.
+                如果数据为null则不能充当where条件
+        解决方案: 动态Sql实现
+        语法:
+            <if test="判断条件"> id = #{id}</if>
+                true:   则拼接标签内容
+                false:  则不拼接标签内容
+           <where>标签: 去除where后边多余的and/or
+    -->
+    <select id="findSqlWhere" resultType="User">
+        select * from demo_user
+            <where>
+                <if test="id != null"> id = #{id}</if>
+                <if test="name !=null">and name = #{name}</if>
+                <if test="age !=null"> and age = #{age}</if>
+                <if test="sex !=null"> and sex = #{sex}</if>
+            </where>
+    </select>
+
+    <!--根据对象中不为null的属性 当做set条件
+        语法: set标签 去除多余1个,号
+    -->
+    <update id="updateUser">
+        update demo_user
+            <set>
+                <if test="name !=null">name=#{name},</if>
+                <if test="age !=null"> age=#{age},</if>
+                <if test="sex !=null"> sex=#{sex},</if>
+            </set>
+            where id = #{id}
+    </update>
+
+    <!--
+     * 如果name有值,则根据name查询.
+     * 如果name没有值,则根据age查询.
+     * 如果name/age都没有值,则根据sex查询
+       语法类似: if->else-if->else
+    -->
+    <select id="findChoose" resultType="User">
+        select * from demo_user
+        <where>
+            <choose>
+                <when test="name !=null"> name=#{name}</when>
+                <when test="age !=null"> age = #{age}</when>
+                <!--必须保证sex必须有值 -->
+                <otherwise>sex=#{sex}</otherwise>
+           </choose>
+       </where>
+   </select>
+
+
+
+
+
+
+
+
+
+</mapper>

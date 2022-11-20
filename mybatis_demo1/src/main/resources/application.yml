@@ -1,0 +1,16 @@
+spring:
+  datasource:
+   driver-class-name: com.mysql.jdbc.Driver
+   url: jdbc:mysql://127.0.0.1:3306/sql_store?autoReconnect=true&allowMultiQueries=true
+   username: root
+   password: Sister1992
+
+mybatis:
+  type-aliases-package: com.jt.pojo
+  mapper-locations: classpath:/mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com.jt.mapper:DEBUG

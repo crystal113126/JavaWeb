@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    调用流程:
+         1.编辑Mapper接口 编辑接口方法
+         2.映射文件与Mapper接口绑定 namespace
+-->
+<mapper namespace="com.jt.mapper.UserMapper">
+
+
+    <!--
+        1.id与接口的方法名称绑定
+        2. 回顾:JDBC->resultSet->遍历结果集->手动封装对象
+        3. resultType: mybatis自动的将结果集的数据封装为对象
+                       如果返回值List集合,则自动封装为List,User充当其中的泛型对象
+                       如果返回值User对象.则直接返回User对象
+    -->
+    <select id="findAll" resultType="com.jt.pojo.User">
+        select * from customers
+    </select>
+
+    <select id="findUserById" resultType="com.jt.pojo.User">
+        select * from customers where customer_id= #{customer_id}
+    </select>
+
+    <insert id="saveUser">
+        insert into customers value(null,#{first_name},#{last_name}, null, null, #{address},#{city},#{state}, #{points})
+    </insert>
+
+    <update id="updateUser">
+        update customers set state=#{state}, points=#{points}
+        where customer_id=#{customer_id}
+    </update>
+
+    <delete id="deletUser">
+        delete from customers where first_name=#{name}
+    </delete>
+
+
+    <select id="findUserByPoints" resultType="com.jt.pojo.User">
+        select * from customers where points>#{minPoints} and points &lt; #{maxPoints}
+    </select>
+
+    <sql id="findColumn">
+        select customer_id first_name last_name address city state points from customers
+    </sql>
+
+    <select id="findUserByPoints2" resultType="User">
+        select * from customers where points>#{minPoints} and points &lt; #{maxPoints}
+    </select>
+
+    <select id="findUserLike" resultType="User">
+        select * from customers where last_name like "%"#{key}"%"
+    </select>
+
+    <select id="findId" resultType="User">
+        select * from customers where customer_id in (
+        <foreach collection="array" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+    <update id="testUpdateUser">
+        update customers
+        <set>
+           <if test="state != null"> state=#{state},</if>
+            <if test="points != null">points=#{points},</if>
+        </set>
+        where customer_id= #{customer_id}
+    </update>
+
+
+    <select id="testWhere" resultType="User">
+        select * from customers
+
+       <where>
+            <if test="customer_id != null">customer_id = #{customer_id}</if>
+            <if test="first_name != null"> and first_name =#{first_name}</if>
+            <if test="last_name != null"> and last_name = #{last_name}</if>
+            <if test="address != null">and address = #{address}</if>
+            <if test="city != null">and city = #{city}</if>
+            <if test="state != null">and state = #{state}</if>
+            <if test="points != null">and points = #{points}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Axios入门案例</title>
+	</head>
+	<body>
+		<!-- 1.导入js文件 -->
+		<script src="js/axios.js"></script>
+		
+		<!-- 2.编辑JS代码 -->
+		<script>
+			/* let url1 = "http://localhost:8080/axios/findUser"
+			axios.get(url1)
+				 .then(function(promise){
+					console.log(promise.data)
+					
+					axios.get("url2",promise.data)
+						 .then(promise2 => {
+							 console.log(promise2.data);
+							 
+							 axios.get("url3",promise2.data)
+								  .then(promise3 => {
+									  console.log(promise3.data)
+									  //...嵌套十八层,比喻为回调地狱
+								  })
+						 })
+				 }) */
+				 
+				 /**
+				  * 语法: 
+				  * 	1.async 关键字修饰函数
+				  * 	2.await 关键字修改ajax请求
+				  * 	3.先定义函数.之后调用函数
+				  * 	语法说明: 解构赋值操作
+				  */
+				 async function getUser(){
+					let url1 = "http://localhost:8080/axios/findUser"
+					let {data: result} = await axios.get(url1)
+					console.log(result)
+				 }
+				 
+				 //调用函数
+				 getUser()
+				 
+				 
+				 //let {data: result} = let promise = await axios.get(url1)
+				 //console.log(promise.data)
+				  //return promise
+				 
+				 
+				/* async function getUser2(data){
+					 let url2 = "http://localhost:8080/axios/findUser"
+					 let promise = await axios.get(url2,data)
+					 return promise
+				 }
+				 
+				 let result1 = getUser();
+				 let result2 = getUser2(result1); */
+				 
+		</script>
+		<h1>学习Axios的ajax调用</h1>
+	</body>
+</html>

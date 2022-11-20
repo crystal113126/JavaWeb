@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    调用流程:
+         1.编辑Mapper接口 编辑接口方法
+         2.映射文件与Mapper接口绑定 namespace
+-->
+<mapper namespace="com.jt.mapper.UserMapper">
+    <!--标识使用二级缓存!!!-->
+    <cache/>
+
+    <!--
+        1.id与接口的方法名称绑定
+        2. 回顾:JDBC->resultSet->遍历结果集->手动封装对象
+        3. resultType: mybatis自动的将结果集的数据封装为对象
+                       如果返回值List集合,则自动封装为List,User充当其中的泛型对象
+                       如果返回值User对象.则直接返回User对象
+    -->
+    <select id="findAll" resultType="com.jt.pojo.User">
+        select * from demo_user
+    </select>
+
+    <!--根据id查询用户数据
+        语法: 动态获取数据 #{属性名称}
+        #号效果: 有预编译的效果  防止Sql注入攻击问题
+                所以以后取值使用#号
+    -->
+    <select id="findUserById" resultType="com.jt.pojo.User">
+        select * from demo_user where id= #{id}
+    </select>
+
+    <!--
+        规则:
+             1.如果接口方法中,有int类型的返回值,则入库之后,mybatis自动回传数据
+             2.如果接口中传递的是POJO对象.则通过#{属性}取值
+        大小问题:
+              1.windows系统中程序运行不区分大小写.
+              2.Linux系统 严格区分大小写.
+              3.程序猿口头禅:  我在我本机上没问题呀!!!!
+    -->
+    <insert id="saveUser">
+        insert into demo_user(id,name,age,sex) values (null,#{name},#{age},#{sex})
+    </insert>
+
+    <update id="updateUser">
+        update demo_user set age=#{age}, sex=#{sex}
+        where name=#{name}
+    </update>
+
+    <delete id="deleteUser">
+        delete from demo_user where name=#{name}
+    </delete>
+
+    <!--
+        知识点1: 通过 #{参数名称/对象中的属性/Map中的key}
+        知识点2: xml文件中有些字符需要转义
+                > &gt;   < &lt;
+                & &amp;
+    -->
+    <select id="findUserByAge" resultType="com.jt.pojo.User">
+        select * from demo_user where age>#{minAge} and age &lt; #{maxAge}
+    </select>
+
+    <select id="findUserByAge2" resultType="com.jt.pojo.User">
+        select * from demo_user where age>#{minAge} and age &lt; #{maxAge}
+    </select>
+
+    <!--Sql标签作用: 抽取公共的部分,可以被其它的Sql引用-->
+    <sql id="findColumn">
+        select id,name,age,sex from demo_user
+    </sql>
+
+    <select id="findByLike" resultType="User">
+        <include refid="findColumn"/> where name like "%"#{key}"%"
+    </select>
+
+    <!--
+        需求: Integer[] ids 中的数据一个一个取出来.拼接Sql
+        知识点: mybatis中如何遍历数组
+        foreach标签用法:
+            1. collection:需要遍历的集合的类型
+                1.1 数组类型  关键字:array
+                1.2 list类型 关键字:list
+                1.3 map类型  关键字:Map中的key
+            2. open/close 循环开始和结束标签,一般自己写
+            3. item 遍历数据的变量名称
+            4. separator 参数之间的分隔符
+    -->
+    <select id="findInArray" resultType="User">
+        select * from demo_user where id in (
+        <foreach collection="list" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </select>
+
+    <!--参数传递是Map集合,所以关键字使用key-ids1 -->
+    <select id="findInMap" resultType="User">
+        select * from demo_user where id in (
+            <foreach collection="ids1" item="id" separator=",">
+                #{id}
+            </foreach>
+            ,
+            <foreach collection="ids2" item="id" separator=",">
+                #{id}
+            </foreach>
+        )
+    </select>
+
+</mapper>

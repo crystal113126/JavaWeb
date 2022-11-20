@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jt.mapper.EmpMapper">
+
+    <!--
+        知识点:
+            1.如果单表查询首选resultType
+            2.如果进行关联查询 首选resultMap
+            3.如果sql的结果集出现了重名字段,则mybatis映射必然报错.
+    -->
+    <select id="findAll" resultMap="empRM">
+        SELECT emp.*,dept.dept_name FROM emp,dept
+        WHERE emp.dept_id = dept.dept_id
+    </select>
+
+    <!-- 完成一对一封装
+        目的: 一个员工中封装一个部门对象
+        语法:
+            1.association 表示一对一封装
+            2.property  当前主对象的属性名称
+            3.javaType  指定属性的类型
+    -->
+    <resultMap id="empRM" type="Emp" autoMapping="true">
+        <!-- 标识主键信息 -->
+        <id column="emp_id" property="empId"/>
+        <!--<result column="emp_name" property="empName"/>-->
+
+        <!--完成一对一映射-->
+        <association property="dept" javaType="Dept" autoMapping="true">
+            <id column="dept_id" property="deptId"/>
+        </association>
+    </resultMap>
+
+</mapper>

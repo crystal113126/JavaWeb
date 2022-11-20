@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jt.mapper.DeptMapper">
+
+    <select id="findAll" resultMap="deptRM">
+        SELECT dept.*,emp.emp_id,emp.emp_name
+        FROM dept,emp
+        WHERE dept.dept_id=emp.dept_id
+    </select>
+    <!--
+        一对多封装:
+            1.collection: 封装集合类型
+            2.ofType:  指定集合内部(泛型)的对象类型
+    -->
+    <resultMap id="deptRM" type="Dept" autoMapping="true">
+        <!--主键必须标识-->
+        <id column="dept_id" property="deptId"/>
+        <!--一对多封装-->
+        <collection property="emps" ofType="Emp" autoMapping="true">
+            <id column="emp_id" property="empId"/>
+        </collection>
+    </resultMap>
+</mapper>

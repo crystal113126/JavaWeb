@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Axios入门案例</title>
+	</head>
+	<body>
+		<!-- 1.导入js文件 -->
+		<script src="js/axios.js"></script>
+		
+		<!-- 2.编辑JS代码 -->
+		<script>
+			
+			
+			//url地址: http://localhost:8080/findUser
+			let url1 = "http://localhost:8080/axios/findUser"
+			//语法: axios.get(url地址,传递的参数)
+			axios.get(url1)
+				 .then(function(promise){
+					console.log(promise.data)
+				 })
+				 
+			/**
+			 * 2.参数拼接  	
+			 * 需求: 根据Id查询User数据.
+			 */ 
+             let id2 = 100
+			 let url2 = "http://localhost:8080/axios/findUserById?id="+id2
+			 axios.get(url2)
+			      .then(promise=>{
+					console.log(promise.data)
+				  })
+
+			/**
+			 * 查询 name="Kattey" age=2
+			 * URL: http://localhost:8080/axios/findUserByNA?name=XX&age=1
+			 * 
+			 */
+			let user3 = {name:"Kettey", age:1}
+			let url3 = "http://localhost:8080/axios/findUserByNA"
+			axios.get(url3, {params:user3})
+			     .then(promise => {
+					console.log(promise.data) 
+				 })
+			 	  
+			/**
+			 * restful 结构
+			 * 
+			 */
+
+             let user4 = {name: "Nach", age: 9}
+			 let url4 = `http://localhost:8080/axios/user/${user4.name}/${user4.age}`
+             axios.get(url4)
+			      .then(promise=>{
+					console.log(promise.data)
+				  })
+
+
+		</script>
+		<h1>学习Axios的ajax调用</h1>
+	</body>
+</html>
